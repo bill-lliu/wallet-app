@@ -3,6 +3,7 @@ import useClient from "next/dynamic";
 
 export default function Home() {
   // dynamic hydration of wallet info
+
   const PaperWallet = useClient(() => import("./paperwallet"));
 
   return (

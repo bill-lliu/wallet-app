@@ -3,54 +3,19 @@
 import {
   InitializedUser,
   PaperEmbeddedWalletSdk,
-  UserStatus,
 } from "@paperxyz/embedded-wallet-service-sdk";
 
-import { Button } from "react-bootstrap";
 import { useState } from "react";
-import { useEffect } from "react";
-
-// const fetchData = async () => {
-//   const response = await fetch('https://example.com/data');
-//   const data = await response.json();
-//   return data;
-// };
 
 export default function PaperWallet() {
-  // // const [count, setCount] = useState(0);
-  const [sdk, setsdk] = useState(
-    // default paper wallet
-    new PaperEmbeddedWalletSdk({
-      clientId: "1bcbd6c9-7a6a-418c-864e-ebc257f7e713",
-      chain: "Mumbai",
-    })
-  );
+  // default paper wallet - can be reset to whatever the developer's client id is
+  const sdk = new PaperEmbeddedWalletSdk({
+    clientId: "1bcbd6c9-7a6a-418c-864e-ebc257f7e713",
+    chain: "Mumbai",
+  });
+
+  // state object to store user info
   const [user, setUser] = useState<InitializedUser | null>(null);
-
-  // useEffect(() => {
-  //   switch (user?.status) {
-  //     case UserStatus.LOGGED_OUT: {
-  //       // User is logged out, call one of the auth methods on Paper.auth to authenticate the user
-  //       break;
-  //     }
-  //     case UserStatus.LOGGED_IN_WALLET_INITIALIZED: {
-  //       // user is logged in and wallet is all set up.
-  //       // You have access to:
-  //       user.status;
-  //       user.authDetails;
-  //       user.walletAddress;
-  //       user.wallet;
-  //       break;
-  //     }
-  //   }
-  // }, [user]);
-
-  // const getData = async () => {
-  //   const newsdk = await sdk.getUser();
-  // };
-  // getData();
-  // sdk.auth.loginWithPaperModal()
-  // }, []);
 
   // Call when the user clicks your "Connect with Paper" button.
   return (
@@ -58,10 +23,12 @@ export default function PaperWallet() {
       <div className="p-10">
         <h1 className="text-2xl font-800">Paper Wallet Info Viewer</h1>
       </div>
-      <Button
+      <button
         style={{ backgroundColor: "#00a8ff", padding: "10px" }}
         onClick={async () => {
           try {
+            // NOTE: the user info shown is only under the scope of the developer's client id defined above
+            // if you want to see the user info for a different client id, you must change the client id above
             const gotUser = await sdk.auth.loginWithPaperModal();
             // user is now logged in
             console.log(gotUser);
@@ -73,7 +40,7 @@ export default function PaperWallet() {
         }}
       >
         {user ? "Reconnect with Paper" : "Connect with Paper"}
-      </Button>
+      </button>
       <br />
       <div className="p-10">
         {user ? (
@@ -98,11 +65,4 @@ export default function PaperWallet() {
       </div>
     </div>
   );
-
-  // return (
-  //   <div>
-  //     <p>You clicked {count} times</p>
-  //     <Button onClick={() => setCount(count + 1)}>Click me</Button>
-  //   </div>
-  // );
 }
